@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 from django.utils import timezone
 from datetime import timedelta, datetime
 import random, string, logging
-from django.db.models import Q
+from django.shortcuts import render
 
 
 # myList = myApp.objects.filter(is_new__in=[False])
@@ -22,8 +22,7 @@ logger.addHandler(LoggingHandler())
 
 
 def home(request):
-
-    return JsonResponse({"test": "home"})
+    return render(request, "index.html", {})
 
 
 class TestAPI(APIView):

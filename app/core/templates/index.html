@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-3 ">
+  <h2 class="display-4">Library APPI</h2>
+  <div class="mt-4 p-5 bg-light text-dark rounded">
+
+      <h2 id="python-django-library-api-software">Python Django Library API software</h2>
+      <p>With this software, hundreds of thousands of books can be added to a library with a single request, and all books can be reserved to users randomly. Again, you can cancel the reservations of all the books with a single request. By registering as a normal user, you can reserve a book and return your book.</p>
+      <h2 id="running-sample">Running sample</h2>
+      <p>
+        <a href="http://44.212.3.24/">http://44.212.3.24/</a>
+      </p>
+      <p>
+          <a href="https://github.com/mustafasisik/LibraryAPPI">https://github.com/mustafasisik/LibraryAPPI</a>
+      </p>
+      <h2 id="requisites">Requisites</h2>
+      <ul>
+        <li>Python =&gt; python:3.8-slim</li>
+        <li>MongoDB =&gt; mongo:latest</li>
+        <li>PostgreSQL =&gt; postgres:12 </li>
+        <li>Redis =&gt; redis:6</li>
+        <li>Celery</li>
+        <li>Nginx</li>
+      </ul>
+      <h2 id="can-be-executed-with-docker">Can be executed with Docker</h2>
+      <ul>
+        <li>Docker</li>
+        <li>Docker-compose</li>
+      </ul>
+      <h1 id="running-the-app">Running the app</h1>
+      <p>Firstly create the .env file to project folder(Libray/.env</p>
+
+			<span class="hljs-comment"># Django App</span>
+			<span class="hljs-attr">DEBUG</span>=
+
+			<span class="hljs-literal">False</span>
+			<span class="hljs-attr">SECRET_KEY</span>=somesecretkey
+
+
+			<span class="hljs-attr">DJANGO_ALLOWED_HOSTS</span>=*
+
+
+
+			<span class="hljs-comment"># Mongo DB</span>
+			<span class="hljs-attr">MONGO_DB_HOST</span>=mongo
+
+
+			<span class="hljs-attr">MONGO_DB_PORT</span>=
+
+			<span class="hljs-number">27017</span>
+			<span class="hljs-attr">MONGO_DB_NAME</span>=mongo_db
+
+
+			<span class="hljs-attr">MONGO_DB_USERNAME</span>=root
+
+
+			<span class="hljs-attr">MONGO_DB_PASSWORD</span>=root
+
+
+			<span class="hljs-attr">MONGO_DB_URI</span>=mongodb://root:root@mongo:
+
+			<span class="hljs-number">27017</span>
+			<span class="hljs-comment"># PostgreSQL</span>
+			<span class="hljs-attr">POSTGRES_HOST</span>=postgres
+
+
+			<span class="hljs-attr">POSTGRES_DB</span>=app_db
+
+
+			<span class="hljs-attr">POSTGRES_USER</span>=app_db_user
+
+
+			<span class="hljs-attr">POSTGRES_PASSWORD</span>=supersecretpassword
+
+
+			<span class="hljs-attr">POSTGRES_PORT</span>=
+
+			<span class="hljs-number">5432</span>
+			<span class="hljs-comment"># Redis</span>
+			<span class="hljs-attr">REDIS_HOST</span>=redis
+
+
+			<span class="hljs-attr">REDIS_PORT</span>=
+
+			<span class="hljs-number">6379</span>
+			<span class="hljs-attr">REDIS_PASSWORD</span>=supersecretpassword
+
+
+			<span class="hljs-attr">BROKER_URL</span>=redis://:supersecretpassword@redis:
+
+			<span class="hljs-number">6379</span>/
+
+			<span class="hljs-number">0</span>
+			<span class="hljs-attr">REDIS_CHANNEL_URL</span>=redis://:supersecretpassword@redis:
+
+			<span class="hljs-number">6379</span>/
+
+			<span class="hljs-number">1</span>
+			<span class="hljs-attr">CELERY_URL</span>=redis://:supersecretpassword@redis:
+
+			<span class="hljs-number">6379</span>/
+
+			<span class="hljs-number">0</span>
+
+	<hr>
+	<h6 id="usage">After .env file created run this command</h6>
+	<span class="hljs-attribute">docker-compose up</span>
+    <hr>
+
+      <h2 id="api-usage">API USAGE</h2>
+      <h4 id="there-are-two-user-created-at-first-">There are two user created at first:</h4>
+      <ul>
+        <li>Admin User (Superuser) admin@example.com <ul>
+            <li>admin: admin123 </li>
+            <li>We can login to django admin panel with this user</li>
+            <li>Endpoints that require high privileges in API usage can be used by this user.</li>
+          </ul>
+        </li>
+        <li>Library User (Standart user) library.user@example.com <ul>
+            <li>librayuser: user123</li>
+            <li>This user is a normal library user, he/she can only perform operations related to himself.</li>
+          </ul>
+        </li>
+      </ul>
+      <h1 id="usage">Usage</h1>
+      <ul>
+        <li>To check that the system is working, you can check the database by connecting to the django panel via the /admin endpoint with the &#39;admin&#39; user.</li>
+        <li>To start the system, you can create as many books as you want via the api/create_more_book endpoint with the &#39;admin&#39; user.</li>
+        <li>If you want to check _/api/forgot <em>password</em> endpoint you need to change EMAIL_HOST_USER and EMAIL_HOST_PASSWORD with yours in settings.py file</li>
+      </ul>
+
+      <h2 id="endpoints-">ENDPOINTS:</h2>
+      <h5 id="login">Login</h5>
+      <p>
+        <code>POST api/login</code>
+      </p>
+      <ul>
+        <li>username (required) // unique</li>
+        <li>password (required) // str</li>
+      </ul>
+      <p>Response: <code>{&quot;token&quot;: &quot;4ced91d45bd77cd0ce67e6b54f97dc1f0b64b248&quot;}</code>
+      </p>
+      <h5 id="register">Register</h5>
+      <p>
+        <code>POST api/register_user</code>
+      </p>
+      <ul>
+        <li>username (required) // unique</li>
+        <li>email (required) // </li>
+        <li>password (required) // str</li>
+        <li>name (required) // str</li>
+        <li>surname (required) // str</li>
+      </ul>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;User registered.&quot;}</code>
+      </p>
+      <h5 id="forget-password">Forget Password</h5>
+      <p>
+        <code>POST api/forget_password</code>
+      </p>
+      <ul>
+        <li>email (required) // </li>
+      </ul>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;We send you an email that contains a password reset code. Please check your email!&quot;}</code>
+      </p>
+      <h5 id="reset-password">Reset Password</h5>
+      <p>
+        <code>POST api/reset_password</code>
+      </p>
+      <ul>
+        <li>code (required) // an 8 letter code</li>
+        <li>email (required) // </li>
+        <li>password (required) // </li>
+      </ul>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;Password reset completed.&quot;}</code>
+      </p>
+      <h5 id="reserve-book">Reserve Book</h5>
+      <p>Required Headers: SessionAuthentication, BasicAuthentication, TokenAuthentication</p>
+      <p>
+        <code>POST api/reserve_book</code>
+      </p>
+      <ul>
+        <li>barcode (required) // must be 7 digits number as string(&quot;0000120&quot;)</li>
+      </ul>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;Book is reserved to date 12.07.2022&quot;}</code>
+      </p>
+      <h5 id="return-book">Return Book</h5>
+      <p>Required Headers: Authorization</p>
+      <p>
+        <code>POST api/return_book</code>
+      </p>
+      <ul>
+        <li>barcode (required) // must be 7 digits number as string(&quot;0000120&quot;)</li>
+      </ul>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;Book is returned.&quot;}</code>
+      </p>
+      <h5 id="create-book">Create Book</h5>
+      <p>Required Headers: Authorization</p>
+      <ul>
+        <li>
+          <em>Must be superuser</em>
+        </li>
+      </ul>
+      <p>
+        <code>POST api/create_book</code>
+      </p>
+      <ul>
+        <li>name (required) // book name as str</li>
+      </ul>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;Book is created.&quot;}</code>
+      </p>
+      <h5 id="delete-book">Delete Book</h5>
+      <p>Required Headers: Authorization</p>
+      <ul>
+        <li>
+          <em>Must be superuser</em>
+        </li>
+        <li>Save book as deleted but not remove completely.</li>
+      </ul>
+      <p>
+        <code>POST api/delete_book</code>
+      </p>
+      <ul>
+        <li>name (required) // book name as str</li>
+      </ul>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;Book is deleted.&quot;}</code>
+      </p>
+      <h5 id="create-more-book">Create More Book</h5>
+      <p>Required Headers: Authorization</p>
+      <ul>
+        <li>
+          <em>Must be superuser</em>
+        </li>
+        <li>Tt works with celery and creates book with random name with Faker</li>
+      </ul>
+      <p>
+        <code>POST api/create_more_book</code>
+      </p>
+      <ul>
+        <li>book_count (required) // int ex(100000)</li>
+      </ul>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;100000 Books is creating...&quot;}</code>
+      </p>
+      <h5 id="remove-all-book">Remove All Book</h5>
+      <p>Required Headers: Authorization</p>
+      <ul>
+        <li>
+          <em>Must be superuser</em>
+        </li>
+        <li>Removes all books completely</li>
+      </ul>
+      <p>
+        <code>POST api/remove_all_books</code>
+      </p>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;Removing all books...&quot;}</code>
+      </p>
+      <h5 id="reserve-all-book">Reserve All Book</h5>
+      <p>Required Headers: Authorization</p>
+      <ul>
+        <li>
+          <em>Must be superuser</em>
+        </li>
+        <li>Reserving all books for all users randomly</li>
+      </ul>
+      <p>
+        <code>POST api/reserve_all_books</code>
+      </p>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;Reserving all books...&quot;}</code>
+      </p>
+      <h5 id="return-all-book">Return All Book</h5>
+      <p>Required Headers: Authorization</p>
+      <ul>
+        <li>
+          <em>Must be superuser</em>
+        </li>
+        <li>Returning all books</li>
+      </ul>
+      <p>
+        <code>POST api/return_all_books</code>
+      </p>
+      <p>Response: <code>{&quot;success&quot;: true, &quot;message&quot;: &quot;Returning all books...&quot;}</code>
+      </p>
+
+  </div>
+</div>
+
+</body>
+</html>
