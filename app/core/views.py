@@ -22,9 +22,8 @@ logger.addHandler(LoggingHandler())
 
 
 def home(request):
-    user_ids = User.objects.all().values_list('id', flat=True)
 
-    return JsonResponse({"test": user_ids.order_by('?').first()})
+    return JsonResponse({"test": "home"})
 
 
 class TestAPI(APIView):
