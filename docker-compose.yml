@@ -1,0 +1,113 @@
+version: '3.4'
+
+services:
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    env_file: .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+#      - MONGO_INITDB_DATABASE=mongo_db
+#      - MONGO_INITDB_USERNAME=root
+#      - MONGO_INITDB_PASSWORD=root
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "27017:27017"
+
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    restart: always
+    env_file: .env
+    environment:
+      - POSTGRES_DB=app_db
+      - POSTGRES_USER=app_db_user
+      - POSTGRES_PASSWORD=supersecretpassword
+      - POSTGRES_PORT=5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - media_volume:/usr/src/app/mediafiles
+
+  redis:
+    image: redis:6
+    container_name: redis
+    restart: always
+    env_file: .env
+    command: redis-server --requirepass supersecretpassword
+    ports:
+      - "6379:6379"
+    volumes:
+      - ${PWD}/_data/redis:/var/lib/redis
+
+  backend:
+    build: ./app
+    image: app:latest
+    container_name: app
+    restart: always
+    #command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
+    env_file: .env
+    volumes:
+      # - ./app/:/usr/src/app/
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/mediafiles
+    expose:
+      - 8000
+#    ports:
+#      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/mediafiles
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  celery:
+    build: ./app
+    image: app:latest
+    container_name: celery
+    restart: always
+    command: [
+      "celery",
+      "-A",
+      "app",
+      "worker",
+      "-c",
+      "1",
+      "-l",
+      "INFO",
+      "--without-heartbeat",
+      "--without-gossip",
+      "--without-mingle",
+    ]
+    env_file: .env
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.settings
+      - DJANGO_WSGI=app.wsgi
+      - DEBUG=False
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  postgres_data:
+  mongodata:
+  static_volume:
+  media_volume:
+
+networks:
+  default:
