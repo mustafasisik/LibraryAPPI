@@ -18,7 +18,7 @@ With this software, hundreds of thousands of books can be added to a library wit
 Firstly create the .env file to project folder(Libray/.env
 ```
 # Django App
-DEBUG=0
+DEBUG=False
 SECRET_KEY=somesecretkey
 DJANGO_ALLOWED_HOSTS=*
 
