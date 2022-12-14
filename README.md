@@ -2,6 +2,9 @@
 ## Python Django Library API software
 With this software, hundreds of thousands of books can be added to a library with a single request, and all books can be reserved to users randomly. Again, you can cancel the reservations of all the books with a single request. By registering as a normal user, you can reserve a book and return your book.
 
+## Running sample
+http://44.212.3.24/
+
 ## Requisites
 * Python => python:3.8-slim
 * MongoDB => mongo:latest
