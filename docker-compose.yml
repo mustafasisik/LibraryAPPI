@@ -69,11 +69,11 @@ services:
     image: app:latest
     container_name: app
     restart: always
-    #command: python manage.py runserver 0.0.0.0:8000 # in development
-    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000 # in development
+    #command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
     env_file: .env
     volumes:
-      # - ./app/:/usr/src/app/ # open this in development
+      - ./app/:/usr/src/app/ # open this in development
       - static_volume:/usr/src/app/staticfiles
       - media_volume:/usr/src/app/mediafiles
     expose:
@@ -110,9 +110,8 @@ services:
       "1",
       "-l",
       "INFO",
-      "--without-heartbeat",
-      "--without-gossip",
-      "--without-mingle",
+      "-Q",
+      "celery,celery:1,celery:2,celery:3"
     ]
     env_file: .env
     environment:

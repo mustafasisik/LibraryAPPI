@@ -1,4 +1,5 @@
 import logging
+import time
 from datetime import datetime, timedelta
 
 from faker import Faker
@@ -75,3 +76,31 @@ def return_all_books():
         except Exception as exc:
             logger.error("The book barcode number %s failed due to the %s", book.barcode, exc)
     logger.debug("RESULT FOR ALL BOOKS RETURN: ", "Successfully Completed")
+
+
+@shared_task(queue='celery')
+def tp0():
+    time.sleep(3)
+    print('0')
+    return
+
+
+@shared_task(queue='celery:1')
+def tp1():
+    time.sleep(3)
+    print('1')
+    return
+
+
+@shared_task(queue='celery:2')
+def tp2():
+    time.sleep(3)
+    print('2')
+    return
+
+
+@shared_task(queue='celery:3')
+def tp3():
+    time.sleep(3)
+    print('3')
+    return
